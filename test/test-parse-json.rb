@@ -29,4 +29,16 @@ class TestParseJson < Test::Unit::TestCase
 		)
 	end
 
+	def test_parse_org_repos
+		# curl https://api.github.com/orgs/EdamameTech/repos > edamame-list.json
+		src_json_path = File.join(@data_dir, 'edamame-list.json')
+		parsed_json = JSON.parse(File.read(src_json_path))
+		repos = parsed_json.map do |element|
+			#[element['full_name'], element['git_url']]
+			element['full_name']
+		end
+		assert_equal(["EdamameTech/SiestaWatch"],
+			repos.sort
+		)
+	end
 end
