@@ -16,6 +16,9 @@ zundaがずんだコードで習いたいこと
 * gitとのおつきあい
   * addやcommitの粒度・タイミング
 * ライセンスの記述やドキュメントなどの整備をどういうタイミングで進めるか
+  * 割と最初に決まりました。Web serviceじゃないのでAGPLじゃなくていいよね
+  * ライセンスの元はUbuntuの場合は /usr/share/common-licenses
+    * GPL-2からライセンス文をコピー
 
 コードの書き方にはあんまり興味はないけどとりあえずGitHubにある情報を
 バックアップしておきたい、
@@ -32,4 +35,21 @@ cronなどによって実行するものです。
 
 ライセンス
 ----------
+A program to periodically back up one's repositories hosted on GitHub
+
+Copyright (C) 2013 zunda <zunda at freeshell.org>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received [a copy of the GNU General Public License](GPL-2.txt) along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
