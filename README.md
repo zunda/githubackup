@@ -18,7 +18,7 @@ zundaがずんだコードで習いたいこと
 という人は下記のURLを参考にすると幸せになるかもしれません。
 ずんだコードでは車輪の再発明は厭わないことにしまっす。
 
-* [Pro-tip: How To Backup All Of Your GitHub Repositories In One Go][http://addyosmani.com/blog/backing-up-a-github-account/]
+* [Pro-tip: How To Backup All Of Your GitHub Repositories In One Go](http://addyosmani.com/blog/backing-up-a-github-account/)
 
 このプログラムの使い方
 ----------------------
