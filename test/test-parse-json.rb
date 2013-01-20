@@ -4,9 +4,13 @@ require 'json'
 require 'test/unit'
 
 class TestParseJson < Test::Unit::TestCase
+	def setup
+		@data_dir = File.dirname(__FILE__)
+	end
+
 	def test_parse_user_repos
 		# curl https://api.github.com/users/zunda/repos > zudna-list.json
-		src_json_path = File.join(File.dirname(__FILE__), 'zudna-list.json')
+		src_json_path = File.join(@data_dir, 'zudna-list.json')
 		parsed_json = JSON.parse(File.read(src_json_path))
 		repos = parsed_json.map do |element|
 			#[element['full_name'], element['git_url']]
