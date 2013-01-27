@@ -3,34 +3,6 @@ githubackup
 
 A program to periodically back up one's repositories hosted on GitHub
 
-ずんだコード http://atnd.org/events/35787
-で作成するプログラムの建設予定地です。
-
-zundaがずんだコードで習いたいこと
----------------------------------
-* 最初の一行をどこからどうやって書くか - 取ってきたJSONをパース
-  するお試しコードがテストコードに進化しました。次はプロダクトコードに
-  移していきたい
-* 欲しい機能のどこから書いていくか
-  * 既存のライブラリの探し方 - JSONはとりあえず Ruby 1.9 以上で
-    require 'json' してみました。あとはドキュメントを読む
-* Web service (API)を利用したプログラムの書き方
-  * テストをどう書くか - まあローカルに持ってきたデータをいじりはじめる
-* gitとのおつきあい
-  * addやcommitの粒度・タイミング - うまく動いたらcommit
-* ライセンスの記述やドキュメントなどの整備をどういうタイミングで進めるか
-  Done
-  * 割と最初に決まりました。Web serviceじゃないのでAGPLじゃなくていいよね
-  * ライセンスの元はUbuntuの場合は /usr/share/common-licenses
-    * GPL-2からライセンス文をコピー
-
-コードの書き方にはあんまり興味はないけどとりあえずGitHubにある情報を
-バックアップしておきたい、
-という人は下記のURLを参考にすると幸せになるかもしれません。
-ずんだコードでは車輪の再発明は厭わないことにしまっす。
-
-* [Pro-tip: How To Backup All Of Your GitHub Repositories In One Go](http://addyosmani.com/blog/backing-up-a-github-account/)
-
 このプログラムの使い方
 ----------------------
 このプログラムは、あるGitHubのユーザーがGitHubにホストしてもらっている
@@ -57,3 +29,17 @@ You should have received a copy of [the GNU General Public License](http://www.g
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+ずんだコード
+------------
+このプロジェクトは、
+[ずんだコード](http://atnd.org/events/35787)
+で作成の始まったプロジェクトです。
+ずんだコードの様子は、[Wikiページ](https://github.com/zunda/githubackup/wiki)
+にまとめました。
+
+コードの書き方にはあんまり興味はないけどとりあえずGitHubにある情報を
+バックアップしておきたい、
+という人は下記のURLを参考にすると幸せになるかもしれません。
+ずんだコードでは車輪の再発明は厭わないことにしまっす。
+
+* [Pro-tip: How To Backup All Of Your GitHub Repositories In One Go](http://addyosmani.com/blog/backing-up-a-github-account/)
