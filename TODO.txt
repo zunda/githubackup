@@ -1,2 +1,3 @@
+* test/testgithubrepos.rbとかtest/test-parse-json.rbとかコードの重複が多い
 * GitHubのレポジトリのリストのうち、publicなものはOAuthしなくてもよさそうだ。
   とりあえずOAuthしないで進めてみる
