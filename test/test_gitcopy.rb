@@ -15,6 +15,10 @@ $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'gitcopy'
 
 class TestGitCopy < Test::Unit::TestCase
+	def mimic_git_clone(to_dir)
+		FileUtils.mkdir_p(File.join(to_dir, '.git'))
+	end
+
 	def test_dst_dir
 		repo = GitCopy.new('c/d', 'url', '/a/b')
 		assert_equal('/a/b/c/d', repo.dst_dir)
@@ -25,13 +29,13 @@ class TestGitCopy < Test::Unit::TestCase
 		assert_equal('/a/b/c/d', repo.dst_dir)
 	end
 
-	def test_can_pull
-		# Assuming this file is a clone of a git repository
-		top_dir = File.join(File.dirname(File.expand_path(__FILE__)), '..')
-		full_name = File.basename(top_dir)
-		root_dst_dir = File.dirname(top_dir)
-		repo = GitCopy.new(full_name, 'url', root_dst_dir)
-		assert(repo.can_pull?)
+	def test_on_cloned_dir
+		Dir.mktmpdir do |dir|
+			full_name = 'a/b'
+			mimic_git_clone(File.join(dir, full_name))
+			repo = GitCopy.new(full_name, 'url', dir)
+			assert(repo.can_pull?)
+		end
 	end
 
 	def test_can_not_pull
