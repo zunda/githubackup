@@ -35,6 +35,7 @@ class TestGitCopy < Test::Unit::TestCase
 			mimic_git_clone(File.join(dir, full_name))
 			repo = GitCopy.new(full_name, 'url', dir)
 			assert(repo.can_pull?)
+			assert(!repo.can_clone?)
 		end
 	end
 
