@@ -20,4 +20,9 @@ class GitCopy
 	def can_pull?
 		File.directory?(File.join((dst_dir), '.git'))
 	end
+
+	def can_clone?
+		not File.exist?(dst_dir)
+			# TODO: test creation of files
+	end
 end

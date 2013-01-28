@@ -8,6 +8,7 @@
 # the License, or (at your option) any later version.
 #
 require 'test/unit'
+require 'tmpdir'
 
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'gitcopy'
@@ -36,5 +37,23 @@ class TestGitCopy < Test::Unit::TestCase
 		# Assuming /var/tmp is not a clone of a git repository
 		repo = GitCopy.new('tmp', 'url', '/var')
 		assert(!repo.can_pull?)
+	end
+
+	def test_can_clone
+		Dir.mktmpdir do |dir|
+			repo = GitCopy.new('foo/bar', 'url', dir)
+			assert(repo.can_clone?)
+			Dir.mkdir(File.join(dir, 'foo'))
+			assert(repo.can_clone?)
+		end
+	end
+
+	def test_can_not_clone
+		Dir.mktmpdir do |dir|
+			Dir.mkdir(File.join(dir, 'foo'))
+			Dir.mkdir(File.join(dir, 'foo', 'bar'))
+			repo = GitCopy.new('foo/bar', 'url', dir)
+			assert(!repo.can_clone?)
+		end
 	end
 end
