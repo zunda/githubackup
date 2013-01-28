@@ -17,4 +17,8 @@ class GitCopy
 	def dst_dir
 		File.join(@root_dst_dir, @full_name.split('/'))
 	end
+
+	def can_pull?
+		File.directory?(File.join((dst_dir), '.git'))
+	end
 end
