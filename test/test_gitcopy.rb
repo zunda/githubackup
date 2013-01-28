@@ -36,6 +36,16 @@ class TestGitCopy < Test::Unit::TestCase
 		end
 	end
 
+	def test_on_dst_dir_not_writable
+		Dir.mktmpdir do |dir|
+			root_dst_dir = File.join(dir, 'foo')
+			Dir.mkdir(root_dst_dir)
+			FileUtils.chmod(0500,  root_dst_dir)
+			repo = GitCopy.new('a/b', 'url', root_dst_dir)
+			assert(!repo.can_clone?, 'Should not be able to clone without parent')
+		end
+	end
+
 	def test_on_cloned_dir
 		Dir.mktmpdir do |dir|
 			full_name = 'a/b'
