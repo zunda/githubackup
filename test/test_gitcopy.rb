@@ -14,12 +14,12 @@ require 'gitcopy'
 
 class TestGitCopy < Test::Unit::TestCase
 	def test_dst_dir
-		repo = GitCopy.new('c/d', 'uri', '/a/b')
+		repo = GitCopy.new('c/d', 'url', '/a/b')
 		assert_equal('/a/b/c/d', repo.dst_dir)
 	end
 	
 	def test_dst_dir_with_slash
-		repo = GitCopy.new('c/d', 'uri', '/a/b/')
+		repo = GitCopy.new('c/d', 'url', '/a/b/')
 		assert_equal('/a/b/c/d', repo.dst_dir)
 	end
 
