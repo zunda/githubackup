@@ -39,16 +39,17 @@ class TestGitCopy < Test::Unit::TestCase
 		end
 	end
 
-	def test_can_not_pull
-		# Assuming /var/tmp is not a clone of a git repository
-		repo = GitCopy.new('tmp', 'url', '/var')
-		assert(!repo.can_pull?)
+	def test_on_normal_dir
+		Dir.mktmpdir do |dir|
+			repo = GitCopy.new('a/b', 'url', dir)
+			assert(!repo.can_pull?)
+			assert(repo.can_clone?, 'Should be able to clone without parent dir')
+		end
 	end
 
 	def test_can_clone
 		Dir.mktmpdir do |dir|
 			repo = GitCopy.new('foo/bar', 'url', dir)
-			assert(repo.can_clone?,  'Should be able to clone without parent directory')
 			Dir.mkdir(File.join(dir, 'foo'))
 			assert(repo.can_clone?, 'Should be able to clone with writable parent directory')
 		end
