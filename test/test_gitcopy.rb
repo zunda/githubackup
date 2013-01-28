@@ -44,9 +44,14 @@ class TestGitCopy < Test::Unit::TestCase
 			repo = GitCopy.new('a/b', 'url', dir)
 			assert(!repo.can_pull?)
 			assert(repo.can_clone?, 'Should be able to clone without parent dir')
+
 			Dir.mkdir(File.join(dir, 'a'))
 			assert(!repo.can_pull?)
 			assert(repo.can_clone?, 'Should be able to clone with parent dir')
+
+			Dir.mkdir(File.join(dir, 'a', 'b'))
+			assert(!repo.can_pull?)
+			assert(!repo.can_clone?, 'Should not be able to clone to existing dir')
 		end
 	end
 
@@ -64,7 +69,6 @@ class TestGitCopy < Test::Unit::TestCase
 			Dir.mkdir(File.join(dir, 'foo'))
 			Dir.mkdir(File.join(dir, 'foo', 'bar'))
 			repo = GitCopy.new('foo/bar', 'url', dir)
-			assert(!repo.can_clone?, 'Shold not be able to clone if dst_dir exists')
 			Dir.rmdir(File.join(dir, 'foo', 'bar'))
 			FileUtils.chmod(0500, File.join(dir, 'foo'))
 			assert(!repo.can_clone?,  'Should not be able to clone if parent is not writable')
