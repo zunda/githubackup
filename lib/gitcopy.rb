@@ -34,4 +34,10 @@ class GitCopy
 		end
 		return true
 	end
+
+	def update_command
+		if can_pull?
+			return "cd #{@dst_dir}; git pull"
+		end
+	end
 end

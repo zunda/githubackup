@@ -75,5 +75,12 @@ class TestGitCopy < Test::Unit::TestCase
 			assert(!repo.can_clone?,  'Should not be able to clone if parent is not writable')
 		end
 	end
-
+	
+	def test_git_pull
+		repo = GitCopy.new('user/repo', 'git:user/repo.git', '/dstdir')
+		class << repo
+			def can_pull?; true; end
+		end
+		assert_equal("cd /dstdir/user/repo; git pull", repo.update_command)
+	end
 end
