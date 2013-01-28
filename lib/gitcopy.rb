@@ -8,6 +8,10 @@
 #
 
 class GitCopy
+	attr_reader :git_url
+	attr_reader :full_name
+	attr_reader :dst_dir
+
 	def initialize(full_name, git_url, root_dst_dir)
 		@full_name = full_name
 		@git_url = git_url
@@ -16,7 +20,6 @@ class GitCopy
 		@parent_dir = File.dirname(@dst_dir)
 	end
 
-	attr_reader :dst_dir
 	attr_reader :parent_dir
 
 	def can_pull?
@@ -38,10 +41,13 @@ class GitCopy
 
 	def update_command
 		if can_pull?
-			return "cd #{@dst_dir}; git pull"
+			return "cd #{dst_dir}; git pull"
 		elsif can_clone?
-			if File.exists?(@parent_dir)
-				return "cd #{@parent_dir}; git clone #{@git_url}"
+			cd_and_clone = "cd #{parent_dir}; git clone #{git_url}"
+			if File.exists?(parent_dir)
+				return cd_and_clone
+			else
+				return "mkdir -p #{parent_dir}; #{cd_and_clone}"
 			end
 		end
 	end
