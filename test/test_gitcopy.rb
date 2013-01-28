@@ -28,7 +28,6 @@ class TestGitCopy < Test::Unit::TestCase
 		top_dir = File.join(File.dirname(File.expand_path(__FILE__)), '..')
 		full_name = File.basename(top_dir)
 		root_dst_dir = File.dirname(top_dir)
-		puts top_dir
 		repo = GitCopy.new(full_name, 'url', root_dst_dir)
 		assert(repo.can_pull?)
 	end
