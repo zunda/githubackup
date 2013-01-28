@@ -12,11 +12,10 @@ class GitCopy
 		@full_name = full_name
 		@git_url = git_url
 		@root_dst_dir = root_dst_dir
+		@dst_dir = File.join(@root_dst_dir, @full_name.split('/'))
 	end
 
-	def dst_dir
-		File.join(@root_dst_dir, @full_name.split('/'))
-	end
+	attr_reader :dst_dir
 
 	def can_pull?
 		File.directory?(File.join((dst_dir), '.git'))
