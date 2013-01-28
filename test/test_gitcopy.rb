@@ -29,6 +29,13 @@ class TestGitCopy < Test::Unit::TestCase
 		assert_equal('/a/b/c/d', repo.dst_dir)
 	end
 
+	def test_on_dst_dir
+		Dir.mktmpdir do |dir|
+			repo = GitCopy.new('a/b', 'url', File.join(dir, 'foo'))
+			assert(!repo.can_clone?, 'Should not be able to clone without parent')
+		end
+	end
+
 	def test_on_cloned_dir
 		Dir.mktmpdir do |dir|
 			full_name = 'a/b'

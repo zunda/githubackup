@@ -22,6 +22,9 @@ class GitCopy
 	end
 
 	def can_clone?
+		if not File.directory?(@root_dst_dir)
+			return false
+		end
 		if File.exist?(dst_dir)
 			return false
 		end
