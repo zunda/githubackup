@@ -76,7 +76,7 @@ class TestGitCopy < Test::Unit::TestCase
 		end
 	end
 	
-	def test_git_pull
+	def test_update_with_git_pull
 		repo = GitCopy.new('user/repo', 'git:user/repo.git', '/dstdir')
 		class << repo
 			def can_pull?; true; end
@@ -84,7 +84,7 @@ class TestGitCopy < Test::Unit::TestCase
 		assert_equal("cd /dstdir/user/repo; git pull", repo.update_command)
 	end
 
-	def test_git_clone_without_mkdir
+	def test_update_with_git_clone_without_mkdir
 		Dir.mktmpdir do |dir|
 			repo = GitCopy.new('user/repo', 'git:user/repo.git', dir)
 			Dir.mkdir(File.join(dir, 'user'))
@@ -92,7 +92,7 @@ class TestGitCopy < Test::Unit::TestCase
 		end
 	end
 
-	def test_git_clone_with_mkdir
+	def test_update_with_git_clone_with_mkdir
 		Dir.mktmpdir do |dir|
 			repo = GitCopy.new('user/repo', 'git:user/repo.git', dir)
 			assert_equal("mkdir -p #{dir}/user; cd #{dir}/user; git clone git:user/repo.git", repo.update_command)
