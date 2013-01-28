@@ -22,7 +22,13 @@ class GitCopy
 	end
 
 	def can_clone?
-		not File.exist?(dst_dir)
-			# TODO: test creation of files
+		if File.exist?(dst_dir)
+			return false
+		end
+		parent_dir = File.dirname(dst_dir)
+		if File.directory?(parent_dir) and not File.writable?(parent_dir)
+			return false
+		end
+		return true
 	end
 end

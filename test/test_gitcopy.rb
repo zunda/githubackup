@@ -9,6 +9,7 @@
 #
 require 'test/unit'
 require 'tmpdir'
+require 'fileutils'
 
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'gitcopy'
@@ -42,10 +43,11 @@ class TestGitCopy < Test::Unit::TestCase
 	def test_can_clone
 		Dir.mktmpdir do |dir|
 			repo = GitCopy.new('foo/bar', 'url', dir)
-			assert(repo.can_clone?)
+			assert(repo.can_clone?,  'Should be able to clone without parent directory')
 			Dir.mkdir(File.join(dir, 'foo'))
-			assert(repo.can_clone?)
+			assert(repo.can_clone?, 'Should be able to clone with writable parent directory')
 		end
+		# TODO: check existence of dst_dir
 	end
 
 	def test_can_not_clone
@@ -53,7 +55,10 @@ class TestGitCopy < Test::Unit::TestCase
 			Dir.mkdir(File.join(dir, 'foo'))
 			Dir.mkdir(File.join(dir, 'foo', 'bar'))
 			repo = GitCopy.new('foo/bar', 'url', dir)
-			assert(!repo.can_clone?)
+			assert(!repo.can_clone?, 'Shold not be able to clone if dst_dir exists')
+			Dir.rmdir(File.join(dir, 'foo', 'bar'))
+			FileUtils.chmod(0500, File.join(dir, 'foo'))
+			assert(!repo.can_clone?,  'Should not be able to clone if parent is not writable')
 		end
 	end
 end
