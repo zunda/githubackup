@@ -52,26 +52,11 @@ class TestGitCopy < Test::Unit::TestCase
 			Dir.mkdir(File.join(dir, 'a', 'b'))
 			assert(!repo.can_pull?)
 			assert(!repo.can_clone?, 'Should not be able to clone to existing dir')
-		end
-	end
+			Dir.rmdir(File.join(dir, 'a', 'b'))
 
-	def test_can_clone
-		Dir.mktmpdir do |dir|
-			repo = GitCopy.new('foo/bar', 'url', dir)
-			Dir.mkdir(File.join(dir, 'foo'))
-			assert(repo.can_clone?, 'Should be able to clone with writable parent directory')
-		end
-		# TODO: check existence of dst_dir
-	end
-
-	def test_can_not_clone
-		Dir.mktmpdir do |dir|
-			Dir.mkdir(File.join(dir, 'foo'))
-			Dir.mkdir(File.join(dir, 'foo', 'bar'))
-			repo = GitCopy.new('foo/bar', 'url', dir)
-			Dir.rmdir(File.join(dir, 'foo', 'bar'))
-			FileUtils.chmod(0500, File.join(dir, 'foo'))
+			FileUtils.chmod(0500,  File.join(dir, 'a'))
 			assert(!repo.can_clone?,  'Should not be able to clone if parent is not writable')
 		end
 	end
+
 end
