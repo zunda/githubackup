@@ -50,7 +50,7 @@ class GitCopy
 				return "mkdir -p #{parent_dir}; #{cd_and_clone}"
 			end
 		end
-		raise GitCopyError, "Repository #{full_name} at #{git_url} can not be pulled or cloned"
+		raise GitCopyError, "Repository #{full_name} can not be pulled or cloned to #{dst_dir}"
 	end
 end
 
