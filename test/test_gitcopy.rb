@@ -44,6 +44,9 @@ class TestGitCopy < Test::Unit::TestCase
 			repo = GitCopy.new('a/b', 'url', dir)
 			assert(!repo.can_pull?)
 			assert(repo.can_clone?, 'Should be able to clone without parent dir')
+			Dir.mkdir(File.join(dir, 'a'))
+			assert(!repo.can_pull?)
+			assert(repo.can_clone?, 'Should be able to clone with parent dir')
 		end
 	end
 
