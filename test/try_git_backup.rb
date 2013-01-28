@@ -15,12 +15,12 @@ require 'gitcopy'
 require 'githubrepos'
 
 root_dir = File.join(File.expand_path('.') , File.basename(__FILE__, '.rb'))
-puts "#Command to copy or update repositories under #{root_dir}"
+puts "Copying or updating repositories under #{root_dir}"
 FileUtils.mkdir_p(root_dir)
 
 api_url = 'https://api.github.com/users/zunda/repos'
 repos = GitHub::Repos.parse_json(open(api_url).read)
 repos.entries[0..2].each do |repo|
-	puts GitCopy.new(repo.full_name, repo.git_url, root_dir).update_command
+	GitCopy.update(repo.full_name, repo.git_url, root_dir)
 end
 

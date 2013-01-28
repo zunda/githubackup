@@ -8,6 +8,12 @@
 #
 
 class GitCopy
+	def GitCopy.update(full_name, git_url, root_dst_dir)
+		cmd = GitCopy.new(full_name, git_url, root_dst_dir).update_command
+		puts("$ " + cmd)
+		system(cmd)
+	end
+
 	attr_reader :git_url
 	attr_reader :full_name
 	attr_reader :dst_dir
@@ -41,9 +47,9 @@ class GitCopy
 
 	def update_command
 		if can_pull?
-			return "pushd #{dst_dir}; git pull; popd"
+			return "cd #{dst_dir}; git pull; cd -"
 		elsif can_clone?
-			cd_and_clone = "pushd #{parent_dir}; git clone #{git_url}; popd"
+			cd_and_clone = "cd #{parent_dir}; git clone #{git_url}; cd -"
 			if File.exists?(parent_dir)
 				return cd_and_clone
 			else
