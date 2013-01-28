@@ -98,4 +98,15 @@ class TestGitCopy < Test::Unit::TestCase
 			assert_equal("mkdir -p #{dir}/user; cd #{dir}/user; git clone git:user/repo.git", repo.update_command)
 		end
 	end
+
+	def test_update_error
+		repo = GitCopy.new('user/repo', 'git:user/repo.git', '/dstdir')
+		class << repo
+			def can_pull?; false; end
+			def can_clone?; false; end
+		end
+		assert_raise GitCopyError do
+			repo.update_command
+		end
+	end
 end
