@@ -17,10 +17,14 @@ class TestRepos < Test::Unit::TestCase
 		@data_dir = File.dirname(__FILE__)
 	end
 
+	def name_and_uri(names)
+			return names.map{|e| [e, "git://github.com/#{e}.git"]}
+	end
+
 	def test_parse_user_repos
 		src_json_path = File.join(@data_dir, 'zudna-list.json')
 		repos = GitHub::Repos.parse_json(File.read(src_json_path))
-		assert_equal([
+		assert_equal(name_and_uri([
 			"zunda/MogMogMonitor", "zunda/count-malloc",
 			"zunda/devquiz2011-slidepuzzle", "zunda/fluxconv", "zunda/gist",
 			"zunda/githubackup", "zunda/groonga", "zunda/hiki", "zunda/mruby",
@@ -28,8 +32,7 @@ class TestRepos < Test::Unit::TestCase
 			"zunda/ruby-mp3info", "zunda/ruby-nfork", "zunda/ruby-spiral",
 			"zunda/sorting", "zunda/sprint-android-multiple-widgets",
 			"zunda/t.co-expander", "zunda/tdiary-core",
-			"zunda/zunda-momonga-pkgs"].\
-			map{|e| [e, "git://github.com/#{e}.git"]}.sort,
+			"zunda/zunda-momonga-pkgs"]).sort,
 			repos.entries.map{|e| [e.full_name, e.git_url]}.sort
 		)
 	end
@@ -37,8 +40,7 @@ class TestRepos < Test::Unit::TestCase
 	def test_parse_org_repos
 		src_json_path = File.join(@data_dir, 'edamame-list.json')
 		repos = GitHub::Repos.parse_json(File.read(src_json_path))
-		assert_equal(["EdamameTech/SiestaWatch"].\
-			map{|e| [e, "git://github.com/#{e}.git"]}.sort,
+		assert_equal(name_and_uri(["EdamameTech/SiestaWatch"]).sort,
 			repos.entries.map{|e| [e.full_name, e.git_url]}.sort
 		)
 	end
