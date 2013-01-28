@@ -13,9 +13,11 @@ class GitCopy
 		@git_url = git_url
 		@root_dst_dir = root_dst_dir
 		@dst_dir = File.join(@root_dst_dir, @full_name.split('/'))
+		@parent_dir = File.dirname(@dst_dir)
 	end
 
 	attr_reader :dst_dir
+	attr_reader :parent_dir
 
 	def can_pull?
 		File.directory?(File.join((dst_dir), '.git'))
@@ -28,7 +30,6 @@ class GitCopy
 		if File.exist?(dst_dir)
 			return false
 		end
-		parent_dir = File.dirname(dst_dir)
 		if File.directory?(parent_dir) and not File.writable?(parent_dir)
 			return false
 		end
@@ -38,6 +39,10 @@ class GitCopy
 	def update_command
 		if can_pull?
 			return "cd #{@dst_dir}; git pull"
+		elsif can_clone?
+			if File.exists?(@parent_dir)
+				return "cd #{@parent_dir}; git clone #{@git_url}"
+			end
 		end
 	end
 end

@@ -83,4 +83,12 @@ class TestGitCopy < Test::Unit::TestCase
 		end
 		assert_equal("cd /dstdir/user/repo; git pull", repo.update_command)
 	end
+
+	def test_git_clone_without_mkdir
+		Dir.mktmpdir do |dir|
+			repo = GitCopy.new('user/repo', 'git:user/repo.git', dir)
+			Dir.mkdir(File.join(dir, 'user'))
+			assert_equal("cd #{dir}/user; git clone git:user/repo.git", repo.update_command)
+		end
+	end
 end
