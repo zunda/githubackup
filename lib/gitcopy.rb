@@ -41,9 +41,9 @@ class GitCopy
 
 	def update_command
 		if can_pull?
-			return "cd #{dst_dir}; git pull"
+			return "pushd #{dst_dir}; git pull; popd"
 		elsif can_clone?
-			cd_and_clone = "cd #{parent_dir}; git clone #{git_url}"
+			cd_and_clone = "pushd #{parent_dir}; git clone #{git_url}; popd"
 			if File.exists?(parent_dir)
 				return cd_and_clone
 			else
