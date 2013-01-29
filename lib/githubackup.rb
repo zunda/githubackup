@@ -27,11 +27,11 @@ module GitHuBackUp
 
 			opts.on('-d', '--destination DIRECTORY', 'root directory of backup') do |directory|
 				dstdir = directory
-				puts "Destination directory is set to #{dstdir}" if verbosity > 0
+				puts "Destination directory is set to #{dstdir}" if verbosity > 1
 			end
 
 			opts.on('-u', '--user USER', 'repositories for GitHub user') do |user|
-				puts "Fetching list of repository for #{user}" if verbosity > 0
+				puts "Fetching list of repositories for #{user}" if verbosity > 0
 				r = GitHub::Repos.parse_json(open(GitHubApi.user_repos(user)).read)
 				repos += r
 				if verbosity > 1
@@ -41,7 +41,7 @@ module GitHuBackUp
 				end
 			end
 			opts.on('-o', '--org ORGANIZATION', 'repositories for GitHub organization') do |org|
-				puts "Fetching list of repository for #{org}" if verbosity > 0
+				puts "Fetching list of repositories for #{org}" if verbosity > 0
 				r = GitHub::Repos.parse_json(open(GitHubApi.org_repos(org)).read)
 				repos += r
 				if verbosity > 1
