@@ -17,6 +17,11 @@ module GitHub
 			@full_name = full_name
 			@git_url = git_url
 		end
+
+		def Repo.parse_json(json)
+			parsed = JSON.parse(json)
+			return Repo.new(parsed['full_name'], parsed['git_url'])
+		end
 	end
 
 	class Repos
@@ -28,15 +33,9 @@ module GitHub
 
 		def parse_json(json)
 			parsed = JSON.parse(json)
-			if parsed.respond_to?(:has_key?) and parsed.has_key?('full_name')
-				# Single repository
-				@entries += [Repo.new(parsed['full_name'], parsed['git_url'])]
-			else
-				# Multiple repositories
-				@entries += parsed.map{|entry|
-					Repo.new(entry['full_name'], entry['git_url'])
-				}
-			end
+			@entries += parsed.map{|entry|
+				Repo.new(entry['full_name'], entry['git_url'])
+			}
 		end
 
 		def Repos.parse_json(json)
