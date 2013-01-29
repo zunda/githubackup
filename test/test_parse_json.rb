@@ -19,8 +19,8 @@ class TestParseJson < Test::Unit::TestCase
 	def test_parse_user_repos
 		# curl https://api.github.com/users/zunda/repos > zudna-list.json
 		src_json_path = File.join(@data_dir, 'zudna-list.json')
-		parsed_json = JSON.parse(File.read(src_json_path))
-		repos = parsed_json.map do |element|
+		parsed = JSON.parse(File.read(src_json_path))
+		repos = parsed.map do |element|
 			#[element['full_name'], element['git_url']]
 			element['full_name']
 		end
@@ -40,8 +40,8 @@ class TestParseJson < Test::Unit::TestCase
 	def test_parse_org_repos
 		# curl https://api.github.com/orgs/EdamameTech/repos > edamame-list.json
 		src_json_path = File.join(@data_dir, 'edamame-list.json')
-		parsed_json = JSON.parse(File.read(src_json_path))
-		repos = parsed_json.map do |element|
+		parsed = JSON.parse(File.read(src_json_path))
+		repos = parsed.map do |element|
 			#[element['full_name'], element['git_url']]
 			element['full_name']
 		end
