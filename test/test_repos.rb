@@ -44,4 +44,20 @@ class TestRepos < Test::Unit::TestCase
 			repos.entries.map{|e| [e.full_name, e.git_url]}.sort
 		)
 	end
+
+	def test_parse_user_repo
+		src_json_path = File.join(@data_dir, 'githubackup.json')
+		parsed = GitHub::Repos.parse_json(File.read(src_json_path))
+		assert_equal(name_and_uri(["zunda/githubackup"]).sort,
+			parsed.entries.map{|e| [e.full_name, e.git_url]}.sort
+		)
+	end
+
+	def test_parse_org_repo
+		src_json_path = File.join(@data_dir, 'SiestaWatch.json')
+		parsed = GitHub::Repos.parse_json(File.read(src_json_path))
+		assert_equal(name_and_uri(["EdamameTech/SiestaWatch"]).sort,
+			parsed.entries.map{|e| [e.full_name, e.git_url]}.sort
+		)
+	end
 end
