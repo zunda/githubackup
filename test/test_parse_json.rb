@@ -49,4 +49,20 @@ class TestParseJson < Test::Unit::TestCase
 			repos.sort
 		)
 	end
+
+	def test_parse_user_repo
+		# curl https://api.github.com/repos/zunda/githubackup > githubackup.json
+		src_json_path = File.join(@data_dir, 'githubackup.json')
+		parsed = JSON.parse(File.read(src_json_path))
+		assert_equal("zunda/githubackup", parsed['full_name'])
+		assert_equal("git://github.com/zunda/githubackup.git", parsed['git_url'])
+	end
+
+	def test_parse_org_repo
+		# curl curl https://api.github.com/repos/EdamameTech/SiestaWatch > SiestaWatch.json
+		src_json_path = File.join(@data_dir, 'SiestaWatch.json')
+		parsed = JSON.parse(File.read(src_json_path))
+		assert_equal("EdamameTech/SiestaWatch", parsed['full_name'])
+		assert_equal("git://github.com/EdamameTech/SiestaWatch.git", parsed['git_url'])
+	end
 end
