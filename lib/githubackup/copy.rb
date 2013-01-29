@@ -8,10 +8,8 @@
 #
 
 class GitCopy
-	def GitCopy.update(full_name, git_url, root_dst_dir)
-		cmd = GitCopy.new(full_name, git_url, root_dst_dir).update_command
-		puts("$ " + cmd)
-		system(cmd)
+	def GitCopy.update_cmd(full_name, git_url, root_dst_dir)
+		GitCopy.new(full_name, git_url, root_dst_dir).update_command
 	end
 
 	attr_reader :git_url
