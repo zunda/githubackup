@@ -9,7 +9,7 @@
 
 class GitCopy
 	def GitCopy.update_cmd(full_name, git_url, root_dst_dir)
-		GitCopy.new(full_name, git_url, root_dst_dir).update_command
+		GitCopy.new(full_name, git_url, root_dst_dir).update_cmd
 	end
 
 	attr_reader :git_url
@@ -43,7 +43,7 @@ class GitCopy
 		return true
 	end
 
-	def update_command
+	def update_cmd
 		if can_pull?
 			return "cd #{dst_dir}; git pull; cd -"
 		elsif can_clone?
