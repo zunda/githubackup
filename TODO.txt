@@ -1,3 +1,4 @@
 * test/testgithubrepos.rbとかtest/test-parse-json.rbとかコードの重複が多い
 * もらってくるのはbareレポジトリにした方が良いかも
+  * git clone --mirrorでもらってきたレポジトリを親の更新に追随させる方法は？
 * そのうちprivateなレポジトリをもらえるようにする
