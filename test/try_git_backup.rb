@@ -11,8 +11,8 @@ require 'open-uri'
 require 'fileutils'
 
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-require 'gitcopy'
-require 'githubrepos'
+require 'githubackup/copy'
+require 'githubackup/repos'
 
 root_dir = File.join(File.expand_path('.') , File.basename(__FILE__, '.rb'))
 puts "Copying or updating repositories under #{root_dir}"
@@ -21,6 +21,8 @@ FileUtils.mkdir_p(root_dir)
 api_url = 'https://api.github.com/users/zunda/repos'
 repos = GitHub::Repos.parse_json(open(api_url).read)
 repos.entries[0..2].each do |repo|
-	GitCopy.update(repo.full_name, repo.git_url, root_dir)
+	cmd = GitCopy.update_cmd(repo.full_name, repo.git_url, root_dir)
+	puts cmd
+	system(cmd)
 end
 
