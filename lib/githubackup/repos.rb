@@ -25,23 +25,10 @@ module GitHub
 	end
 
 	class Repos
-		attr_reader :entries
-
-		def initialize
-			@entries = Array.new
-		end
-
-		def parse_json(json)
-			parsed = JSON.parse(json)
-			@entries += parsed.map{|entry|
+		def Repos.parse_json(json)
+			JSON.parse(json).map{|entry|
 				Repo.new(entry['full_name'], entry['git_url'])
 			}
-		end
-
-		def Repos.parse_json(json)
-			r = Repos.new
-			r.parse_json(json)
-			r
 		end
 	end
 end

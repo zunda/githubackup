@@ -37,7 +37,7 @@ class TestRepos < Test::Unit::TestCase
 			"zunda/sorting", "zunda/sprint-android-multiple-widgets",
 			"zunda/t.co-expander", "zunda/tdiary-core",
 			"zunda/zunda-momonga-pkgs"]).sort,
-			repos.entries.map{|e| [e.full_name, e.git_url]}.sort
+			repos.map{|e| [e.full_name, e.git_url]}.sort
 		)
 	end
 
@@ -45,7 +45,7 @@ class TestRepos < Test::Unit::TestCase
 		src_json_path = File.join(@data_dir, 'edamame-list.json')
 		repos = GitHub::Repos.parse_json(File.read(src_json_path))
 		assert_equal(names_and_uris(["EdamameTech/SiestaWatch"]).sort,
-			repos.entries.map{|e| [e.full_name, e.git_url]}.sort
+			repos.map{|e| [e.full_name, e.git_url]}.sort
 		)
 	end
 
@@ -66,11 +66,11 @@ class TestRepos < Test::Unit::TestCase
 	end
 
 	def test_add_repos
-		repos = GitHub::Repos.new
+		repos = Array.new
 		src_json_path = File.join(@data_dir, 'zudna-list.json')
-		repos.parse_json(File.read(src_json_path))
+		repos += GitHub::Repos.parse_json(File.read(src_json_path))
 		src_json_path = File.join(@data_dir, 'edamame-list.json')
-		repos.parse_json(File.read(src_json_path))
+		repos += GitHub::Repos.parse_json(File.read(src_json_path))
 
 		assert_equal(names_and_uris([
 			"zunda/MogMogMonitor", "zunda/count-malloc",
@@ -82,7 +82,7 @@ class TestRepos < Test::Unit::TestCase
 			"zunda/t.co-expander", "zunda/tdiary-core",
 			"zunda/zunda-momonga-pkgs",
 			"EdamameTech/SiestaWatch"]).sort,
-			repos.entries.map{|e| [e.full_name, e.git_url]}.sort
+			repos.map{|e| [e.full_name, e.git_url]}.sort
 		)
 	end
 end
