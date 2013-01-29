@@ -12,7 +12,7 @@ require 'tmpdir'
 require 'fileutils'
 
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-require 'gitcopy'
+require 'githubackup/copy'
 
 class TestGitCopy < Test::Unit::TestCase
 	def mimic_git_clone(to_dir)

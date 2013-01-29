@@ -10,7 +10,7 @@
 require 'test/unit'
 
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-require 'githubrepos'
+require 'githubackup/repos'
 
 class TestRepos < Test::Unit::TestCase
 	def setup
