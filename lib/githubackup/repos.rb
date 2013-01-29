@@ -30,10 +30,10 @@ module GitHub
 			parsed = JSON.parse(json)
 			if parsed.respond_to?(:has_key?) and parsed.has_key?('full_name')
 				# Single repository
-				@entries = [Repo.new(parsed['full_name'], parsed['git_url'])]
+				@entries += [Repo.new(parsed['full_name'], parsed['git_url'])]
 			else
 				# Multiple repositories
-				@entries = parsed.map{|entry|
+				@entries += parsed.map{|entry|
 					Repo.new(entry['full_name'], entry['git_url'])
 				}
 			end

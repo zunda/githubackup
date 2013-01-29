@@ -60,4 +60,16 @@ class TestRepos < Test::Unit::TestCase
 			parsed.entries.map{|e| [e.full_name, e.git_url]}.sort
 		)
 	end
+
+	def test_add_repos
+		repos = GitHub::Repos.new
+		[ 'githubackup.json', 'SiestaWatch.json'].each do |file|
+			src_json_path = File.join(@data_dir, file)
+			repos.parse_json(File.read(src_json_path))
+		end
+		assert_equal(
+			name_and_uri(["zunda/githubackup", "EdamameTech/SiestaWatch"]).sort,
+			repos.entries.map{|e| [e.full_name, e.git_url]}.sort
+		)
+	end
 end
