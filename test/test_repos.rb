@@ -27,7 +27,7 @@ class TestRepos < Test::Unit::TestCase
 
 	def test_parse_user_repos
 		src_json_path = File.join(@data_dir, 'zudna-list.json')
-		repos = GitHub::Repos.parse_json(File.read(src_json_path))
+		repos = GitHuBackUp::Repos.parse_json(File.read(src_json_path))
 		assert_equal(names_and_uris([
 			"zunda/MogMogMonitor", "zunda/count-malloc",
 			"zunda/devquiz2011-slidepuzzle", "zunda/fluxconv", "zunda/gist",
@@ -43,7 +43,7 @@ class TestRepos < Test::Unit::TestCase
 
 	def test_parse_org_repos
 		src_json_path = File.join(@data_dir, 'edamame-list.json')
-		repos = GitHub::Repos.parse_json(File.read(src_json_path))
+		repos = GitHuBackUp::Repos.parse_json(File.read(src_json_path))
 		assert_equal(names_and_uris(["EdamameTech/SiestaWatch"]).sort,
 			repos.map{|e| [e.full_name, e.git_url]}.sort
 		)
@@ -51,7 +51,7 @@ class TestRepos < Test::Unit::TestCase
 
 	def test_parse_user_repo
 		src_json_path = File.join(@data_dir, 'githubackup.json')
-		parsed = GitHub::Repo.parse_json(File.read(src_json_path))
+		parsed = GitHuBackUp::Repo.parse_json(File.read(src_json_path))
 		assert_equal(name_and_uri("zunda/githubackup"),
 			[parsed.full_name, parsed.git_url]
 		)
@@ -59,7 +59,7 @@ class TestRepos < Test::Unit::TestCase
 
 	def test_parse_org_repo
 		src_json_path = File.join(@data_dir, 'SiestaWatch.json')
-		parsed = GitHub::Repo.parse_json(File.read(src_json_path))
+		parsed = GitHuBackUp::Repo.parse_json(File.read(src_json_path))
 		assert_equal(name_and_uri("EdamameTech/SiestaWatch"),
 			[parsed.full_name, parsed.git_url]
 		)
@@ -68,9 +68,9 @@ class TestRepos < Test::Unit::TestCase
 	def test_add_repos
 		repos = Array.new
 		src_json_path = File.join(@data_dir, 'zudna-list.json')
-		repos += GitHub::Repos.parse_json(File.read(src_json_path))
+		repos += GitHuBackUp::Repos.parse_json(File.read(src_json_path))
 		src_json_path = File.join(@data_dir, 'edamame-list.json')
-		repos += GitHub::Repos.parse_json(File.read(src_json_path))
+		repos += GitHuBackUp::Repos.parse_json(File.read(src_json_path))
 
 		assert_equal(names_and_uris([
 			"zunda/MogMogMonitor", "zunda/count-malloc",

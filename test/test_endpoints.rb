@@ -15,16 +15,16 @@ require 'githubackup/endpoints'
 class TestEndPoints < Test::Unit::TestCase
 	def test_user_repos
 		assert_equal('https://api.github.com/users/zunda/repos',
-			GitHubApi.user_repos('zunda'))
+			GitHuBackUp::GitHubApi.user_repos('zunda'))
 	end
 
 	def test_org_repos
 		assert_equal('https://api.github.com/orgs/EdamameTech/repos',
-			GitHubApi.org_repos('EdamameTech'))
+			GitHuBackUp::GitHubApi.org_repos('EdamameTech'))
 	end
 
 	def test_full_name_repo
 		assert_equal('https://api.github.com/repos/zunda/githubackup',
-			GitHubApi.full_name_repo('zunda/githubackup'))
+			GitHuBackUp::GitHubApi.full_name_repo('zunda/githubackup'))
 	end
 end

@@ -19,9 +19,9 @@ puts "Copying or updating repositories under #{root_dir}"
 FileUtils.mkdir_p(root_dir)
 
 api_url = 'https://api.github.com/users/zunda/repos'
-repos = GitHub::Repos.parse_json(open(api_url).read)
+repos = GitHuBackUp::Repos.parse_json(open(api_url).read)
 repos.entries[0..2].each do |repo|
-	cmd = GitCopy.update_cmd(repo.full_name, repo.git_url, root_dir)
+	cmd = GitHuBackUp::Copy.update_cmd(repo.full_name, repo.git_url, root_dir)
 	puts cmd
 	system(cmd)
 end

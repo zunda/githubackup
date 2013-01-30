@@ -8,7 +8,7 @@
 #
 require 'json'
 
-module GitHub
+module GitHuBackUp
 	class Repo
 		attr_reader :full_name
 		attr_reader :git_url

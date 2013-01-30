@@ -7,16 +7,18 @@
 # the License, or (at your option) any later version.
 #
 
-class GitHubApi
-	def GitHubApi.user_repos(user)
-		"https://api.github.com/users/#{user}/repos"
-	end
+module GitHuBackUp
+	class GitHubApi
+		def GitHubApi.user_repos(user)
+			"https://api.github.com/users/#{user}/repos"
+		end
 
-	def GitHubApi.org_repos(org)
-		"https://api.github.com/orgs/#{org}/repos"
-	end
+		def GitHubApi.org_repos(org)
+			"https://api.github.com/orgs/#{org}/repos"
+		end
 
-	def GitHubApi.full_name_repo(full_name)	# e.g. zunda/githubackup
-		"https://api.github.com/repos/#{full_name}"
+		def GitHubApi.full_name_repo(full_name)	# e.g. zunda/githubackup
+			"https://api.github.com/repos/#{full_name}"
+		end
 	end
 end
