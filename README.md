@@ -13,8 +13,8 @@ cronなどによって実行するものです。
 ```
 githubackup -u zunda -d /backup/repos
 ```
-を実行すると、GitHubユーザー zunda の公開レポジトリのミラーを、
-```/backup/repos```以下に作成あるいは更新します。
+を実行すると、GitHubユーザー```zunda```の
+公開レポジトリのミラーを、```/backup/repos```以下に作成あるいは更新します。
 
 この他のオプションについては、
 ```
