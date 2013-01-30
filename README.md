@@ -6,8 +6,21 @@ A program to periodically back up one's repositories hosted on GitHub
 このプログラムの使い方
 ----------------------
 このプログラムは、あるGitHubのユーザーがGitHubにホストしてもらっている
-レポジトリの一覧を作成して、それぞれのレポジトリのcloneあるいはpullを
+レポジトリの一覧を作成して、それぞれのレポジトリのミラーあるいは更新を
 cronなどによって実行するものです。
+
+例えば、
+```
+githubackup -u zunda -d /backup/repos
+```
+を実行すると、GitHubユーザー zunda の公開レポジトリのミラーを、
+```/backup/repos```以下に作成あるいは更新します。
+
+この他のオプションについては、
+```
+githubackup -h
+```
+を参照してください。
 
 ライセンス
 ----------
