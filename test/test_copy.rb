@@ -15,18 +15,24 @@ $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'githubackup/copy'
 
 class TestCopy < Test::Unit::TestCase
-	def mimic_git_clone(to_dir)
-		FileUtils.mkdir_p(File.join(to_dir, '.git'))
+	def mimic_git_mirror(to_dir)
+		FileUtils.mkdir_p(to_dir)
+		GitHuBackUp::Copy::FILES_IN_MIRROR.each do |f|
+			FileUtils.touch(File.join(to_dir, f))
+		end
+		GitHuBackUp::Copy::DIRS_IN_MIRROR.each do |d|
+			FileUtils.mkdir_p(File.join(to_dir, d))
+		end
 	end
 
 	def test_dst_dir
-		repo = GitHuBackUp::Copy.new('c/d', 'url', '/a/b')
-		assert_equal('/a/b/c/d', repo.dst_dir)
+		repo = GitHuBackUp::Copy.new('full_name', 'git://host/c/d.git', '/a/b')
+		assert_equal('/a/b/c/d.git', repo.dst_dir)
 	end
 	
 	def test_dst_dir_with_slash
-		repo = GitHuBackUp::Copy.new('c/d', 'url', '/a/b/')
-		assert_equal('/a/b/c/d', repo.dst_dir)
+		repo = GitHuBackUp::Copy.new('full_name', 'git://host/c/d.git', '/a/b/')
+		assert_equal('/a/b/c/d.git', repo.dst_dir)
 	end
 
 	def test_on_dst_dir
@@ -48,18 +54,21 @@ class TestCopy < Test::Unit::TestCase
 
 	def test_on_cloned_dir
 		Dir.mktmpdir do |dir|
-			full_name = 'a/b'
-			mimic_git_clone(File.join(dir, full_name))
-			repo = GitHuBackUp::Copy.new(full_name, 'url', dir)
-			assert(repo.can_pull?)
-			assert(!repo.can_clone?)
+			path = '/a/b'
+			url = "git:#{path}"
+			mimic_git_mirror(File.join(dir, path))
+			repo = GitHuBackUp::Copy.new('full_name', url, dir)
+			assert(repo.can_pull?, 'Should be able to pull')
+			assert(!repo.can_clone?, 'Should not be able to clone')
 		end
 	end
 
 	def test_on_normal_dir
 		Dir.mktmpdir do |dir|
-			repo = GitHuBackUp::Copy.new('a/b', 'url', dir)
-			assert(!repo.can_pull?)
+			path = '/a/b'
+			url = "git:#{path}"
+			repo = GitHuBackUp::Copy.new('full_name', url, dir)
+			assert(!repo.can_pull?, 'Should not be able to pull')
 			assert(repo.can_clone?, 'Should be able to clone without parent dir')
 
 			Dir.mkdir(File.join(dir, 'a'))
@@ -77,30 +86,30 @@ class TestCopy < Test::Unit::TestCase
 	end
 	
 	def test_update_with_git_pull
-		repo = GitHuBackUp::Copy.new('user/repo', 'git:user/repo.git', '/dstdir')
+		repo = GitHuBackUp::Copy.new('user/repo', 'git:/user/repo.git', '/dstdir')
 		class << repo
 			def can_pull?; true; end
 		end
-		assert_equal("cd /dstdir/user/repo; git pull; cd -", repo.update_cmd)
+		assert_equal("cd '/dstdir/user/repo.git'; git fetch; cd -", repo.update_cmd)
 	end
 
 	def test_update_with_git_clone_without_mkdir
 		Dir.mktmpdir do |dir|
-			repo = GitHuBackUp::Copy.new('user/repo', 'git:user/repo.git', dir)
+			repo = GitHuBackUp::Copy.new('user/repo', 'git:/user/repo.git', dir)
 			Dir.mkdir(File.join(dir, 'user'))
-			assert_equal("cd #{dir}/user; git clone git:user/repo.git; cd -", repo.update_cmd)
+			assert_equal("cd '#{dir}/user'; git clone --mirror 'git:/user/repo.git'; cd -", repo.update_cmd)
 		end
 	end
 
 	def test_update_with_git_clone_with_mkdir
 		Dir.mktmpdir do |dir|
-			repo = GitHuBackUp::Copy.new('user/repo', 'git:user/repo.git', dir)
-			assert_equal("mkdir -p #{dir}/user; cd #{dir}/user; git clone git:user/repo.git; cd -", repo.update_cmd)
+			repo = GitHuBackUp::Copy.new('full_name', 'git:/user/repo.git', dir)
+			assert_equal("mkdir -p '#{dir}/user'; cd '#{dir}/user'; git clone --mirror 'git:/user/repo.git'; cd -", repo.update_cmd)
 		end
 	end
 
 	def test_update_error
-		repo = GitHuBackUp::Copy.new('user/repo', 'git:user/repo.git', '/dstdir')
+		repo = GitHuBackUp::Copy.new('user/repo', 'git:/user/repo.git', '/dstdir')
 		class << repo
 			def can_pull?; false; end
 			def can_clone?; false; end

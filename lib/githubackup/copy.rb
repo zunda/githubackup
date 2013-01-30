@@ -6,6 +6,7 @@
 # published by the Free Software Foundation, either version 2 of
 # the License, or (at your option) any later version.
 #
+require 'uri'
 
 module GitHuBackUp
 	class Copy
@@ -21,23 +22,44 @@ module GitHuBackUp
 			@full_name = full_name
 			@git_url = git_url
 			@root_dst_dir = root_dst_dir
-			full_name_elements = @full_name.split('/')
-			unless full_name_elements.size == 2
-				# We assume full name must have one slash
-				raise ValidationError, 'Full name has invalid number of slashes'
+			begin
+				uri_path = URI.parse(@git_url).path
+			rescue URI::Error => e
+				raise ValidationError, e
 			end
-			unless full_name_elements.reject{|e| e =~ /[\w\d]/}.empty?
+			unless uri_path
+				raise ValidationError, 'There is no path in URL'
+			end
+			path = uri_path.split('/').reject{|e| e.empty?}
+			unless path.reject{|e| e =~ /[\w\d]/}.empty?
 				# We assume each element must have one or more alphabet or number
 				raise ValidationError, 'Full name has invalid element'
 			end
-			@dst_dir = File.join(@root_dst_dir, full_name_elements)
+			@dst_dir = File.join(@root_dst_dir, path)
 			@parent_dir = File.dirname(@dst_dir)
 		end
 
 		attr_reader :parent_dir
 
+		FILES_IN_MIRROR = %w(config description HEAD packed-refs)
+		# File FETCH and FETCH_HEAD might not be in some bare repositories
+		DIRS_IN_MIRROR = %w(branches hooks info objects refs)
+
 		def can_pull?
-			File.directory?(File.join((dst_dir), '.git'))
+			if not File.directory?(dst_dir)
+				return false
+			end
+			FILES_IN_MIRROR.each do |f|
+				if not File.file?(File.join(dst_dir, f))
+					return false
+				end
+			end
+			DIRS_IN_MIRROR.each do |d|
+				if not File.directory?(File.join(dst_dir, d))
+					return false
+				end
+			end
+			return true
 		end
 
 		def can_clone?
@@ -55,9 +77,9 @@ module GitHuBackUp
 
 		def update_cmd
 			if can_pull?
-				return "cd '#{dst_dir}'; git pull; cd -"
+				return "cd '#{dst_dir}'; git fetch; cd -"
 			elsif can_clone?
-				cd_and_clone = "cd '#{parent_dir}'; git clone '#{git_url}'; cd -"
+				cd_and_clone = "cd '#{parent_dir}'; git clone --mirror '#{git_url}'; cd -"
 				if File.exists?(parent_dir)
 					return cd_and_clone
 				else
