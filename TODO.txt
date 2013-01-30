@@ -1,2 +1,4 @@
+* インストールできるようにする
+* レポジトリに更新があった時に表示する
 * test/test_repos.rbとかtest/test_parse_json.rbとかコードの重複が多い
 * そのうちprivateなレポジトリをもらえるようにする
