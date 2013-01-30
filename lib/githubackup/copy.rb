@@ -27,7 +27,7 @@ module GitHuBackUp
 			rescue URI::Error => e
 				raise ValidationError, e
 			end
-			unless uri_path
+			if not uri_path or uri_path.empty?
 				raise ValidationError, 'There is no path in URL'
 			end
 			path = uri_path.split('/').reject{|e| e.empty?}

@@ -10,6 +10,7 @@
 require 'test/unit'
 require 'tmpdir'
 require 'fileutils'
+require 'uri'
 
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'githubackup/copy'
@@ -119,12 +120,17 @@ class TestCopy < Test::Unit::TestCase
 		end
 	end
 
-	def test_vaildate_full_name
-		invalid_full_names = ['a/b/c', '/x', 'x/', './a', 'a/.', 'a/..']
-		invalid_full_names.each do |full_name|
-			assert_raise GitHuBackUp::ValidationError do
-				GitHuBackUp::Copy.new(full_name, 'git:user/repo.git', '/dstdir')
+	def test_vaildate_uri
+		['git:/.', 'git:/..', 'git:/./a', 'git:/../a', 'git://host'].each do |uri|
+			assert_nothing_raised do
+				URI.parse(uri)
 			end
+			assert_raise GitHuBackUp::ValidationError do
+				GitHuBackUp::Copy.new('full_name', uri, '/dstdir')
+			end
+		end
+		assert_raise GitHuBackUp::ValidationError do
+			GitHuBackUp::Copy.new('full_name', 'git:', '/dstdir')
 		end
 	end
 end
