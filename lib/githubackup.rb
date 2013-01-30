@@ -32,7 +32,7 @@ module GitHuBackUp
 
 			opts.on('-u', '--user USER', 'repositories for GitHub user') do |user|
 				puts "Fetching list of repositories for #{user}" if verbosity > 0
-				r = GitHuBackUp::Repos.parse_json(open(GitHuBackUp::GitHubApi.user_repos(user)).read)
+				r = Repos.parse_json(open(GitHubApi.user_repos(user)).read)
 				repos += r
 				if verbosity > 1
 					r.each do |repo|
@@ -42,7 +42,7 @@ module GitHuBackUp
 			end
 			opts.on('-o', '--org ORGANIZATION', 'repositories for GitHub organization') do |org|
 				puts "Fetching list of repositories for #{org}" if verbosity > 0
-				r = GitHuBackup::Repos.parse_json(open(GitHuBackUp::GitHubApi.org_repos(org)).read)
+				r = Repos.parse_json(open(GitHubApi.org_repos(org)).read)
 				repos += r
 				if verbosity > 1
 					r.each do |repo|
@@ -52,7 +52,7 @@ module GitHuBackUp
 			end
 			opts.on('-r', '--repository FULL_NAME', 'full name of GitHub repository') do |name|
 				puts "Fetching information for repository #{name}" if verbosity > 0
-				r = GitHub::Repo.parse_json(open(GitHuBackUp::GitHubApi.full_name_repo(name)).read)
+				r = GitHub::Repo.parse_json(open(GitHubApi.full_name_repo(name)).read)
 				repos += [r]
 				if verbosity > 1
 					puts "Added repository #{r.full_name}"
@@ -68,7 +68,7 @@ module GitHuBackUp
 			end
 
 			opts.on_tail('-V', '--version') do
-				puts GitHuBackUp::VERSION
+				puts VERSION
 				exit
 			end
 			opts.on_tail('-h', '--help') do
@@ -101,7 +101,7 @@ module GitHuBackUp
 				end
 			end
 			begin
-				cmd = GitCopy.update_cmd(repo.full_name, repo.git_url, dstdir)
+				cmd = Copy.update_cmd(repo.full_name, repo.git_url, dstdir)
 				if really_execute
 					if verbosity < 2
 						# hide output from commands
@@ -109,7 +109,7 @@ module GitHuBackUp
 					end
 					system(cmd)
 				end
-			rescue GitCopyError => e
+			rescue CopyError => e
 				$stderr.puts e
 				errors = true
 			end
