@@ -21,7 +21,16 @@ module GitHuBackUp
 			@full_name = full_name
 			@git_url = git_url
 			@root_dst_dir = root_dst_dir
-			@dst_dir = File.join(@root_dst_dir, @full_name.split('/'))
+			full_name_elements = @full_name.split('/')
+			unless full_name_elements.size == 2
+				# We assume full name must have one slash
+				raise ValidationError, 'Full name has invalid number of slashes'
+			end
+			unless full_name_elements.reject{|e| e =~ /[\w\d]/}.empty?
+				# We assume each element must have one or more alphabet or number
+				raise ValidationError, 'Full name has invalid element'
+			end
+			@dst_dir = File.join(@root_dst_dir, full_name_elements)
 			@parent_dir = File.dirname(@dst_dir)
 		end
 
@@ -60,4 +69,5 @@ module GitHuBackUp
 	end
 
 	class CopyError < StandardError; end
+	class ValidationError < StandardError; end
 end

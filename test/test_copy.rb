@@ -109,4 +109,13 @@ class TestCopy < Test::Unit::TestCase
 			repo.update_cmd
 		end
 	end
+
+	def test_vaildate_full_name
+		invalid_full_names = ['a/b/c', '/x', 'x/', './a', 'a/.', 'a/..']
+		invalid_full_names.each do |full_name|
+			assert_raise GitHuBackUp::ValidationError do
+				GitHuBackUp::Copy.new(full_name, 'git:user/repo.git', '/dstdir')
+			end
+		end
+	end
 end
