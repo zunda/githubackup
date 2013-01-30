@@ -55,13 +55,13 @@ module GitHuBackUp
 
 		def update_cmd
 			if can_pull?
-				return "cd #{dst_dir}; git pull; cd -"
+				return "cd '#{dst_dir}'; git pull; cd -"
 			elsif can_clone?
-				cd_and_clone = "cd #{parent_dir}; git clone #{git_url}; cd -"
+				cd_and_clone = "cd '#{parent_dir}'; git clone '#{git_url}'; cd -"
 				if File.exists?(parent_dir)
 					return cd_and_clone
 				else
-					return "mkdir -p #{parent_dir}; #{cd_and_clone}"
+					return "mkdir -p '#{parent_dir}'; #{cd_and_clone}"
 				end
 			end
 			raise CopyError, "Repository #{full_name} can not be pulled or cloned to #{dst_dir}"
