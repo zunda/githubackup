@@ -58,7 +58,7 @@ class TestCopy < Test::Unit::TestCase
 			url = "git:#{path}"
 			mimic_git_mirror(File.join(dir, path))
 			repo = GitHuBackUp::Copy.new('full_name', url, dir)
-			assert(repo.can_pull?, 'Should be able to pull')
+			assert(repo.can_fetch?, 'Should be able to fetch')
 			assert(!repo.can_clone?, 'Should not be able to clone')
 		end
 	end
@@ -68,15 +68,15 @@ class TestCopy < Test::Unit::TestCase
 			path = '/a/b'
 			url = "git:#{path}"
 			repo = GitHuBackUp::Copy.new('full_name', url, dir)
-			assert(!repo.can_pull?, 'Should not be able to pull')
+			assert(!repo.can_fetch?, 'Should not be able to fetch')
 			assert(repo.can_clone?, 'Should be able to clone without parent dir')
 
 			Dir.mkdir(File.join(dir, 'a'))
-			assert(!repo.can_pull?)
+			assert(!repo.can_fetch?)
 			assert(repo.can_clone?, 'Should be able to clone with parent dir')
 
 			Dir.mkdir(File.join(dir, 'a', 'b'))
-			assert(!repo.can_pull?)
+			assert(!repo.can_fetch?)
 			assert(!repo.can_clone?, 'Should not be able to clone to existing dir')
 			Dir.rmdir(File.join(dir, 'a', 'b'))
 
@@ -85,10 +85,10 @@ class TestCopy < Test::Unit::TestCase
 		end
 	end
 	
-	def test_update_with_git_pull
+	def test_update_with_git_fetch
 		repo = GitHuBackUp::Copy.new('user/repo', 'git:/user/repo.git', '/dstdir')
 		class << repo
-			def can_pull?; true; end
+			def can_fetch?; true; end
 		end
 		assert_equal("cd '/dstdir/user/repo.git'; git fetch; cd -", repo.update_cmd)
 	end
@@ -111,7 +111,7 @@ class TestCopy < Test::Unit::TestCase
 	def test_update_error
 		repo = GitHuBackUp::Copy.new('user/repo', 'git:/user/repo.git', '/dstdir')
 		class << repo
-			def can_pull?; false; end
+			def can_fetch?; false; end
 			def can_clone?; false; end
 		end
 		assert_raise GitHuBackUp::CopyError do

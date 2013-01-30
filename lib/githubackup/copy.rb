@@ -45,7 +45,7 @@ module GitHuBackUp
 		# File FETCH and FETCH_HEAD might not be in some bare repositories
 		DIRS_IN_MIRROR = %w(branches hooks info objects refs)
 
-		def can_pull?
+		def can_fetch?
 			if not File.directory?(dst_dir)
 				return false
 			end
@@ -76,7 +76,7 @@ module GitHuBackUp
 		end
 
 		def update_cmd
-			if can_pull?
+			if can_fetch?
 				return "cd '#{dst_dir}'; git fetch; cd -"
 			elsif can_clone?
 				cd_and_clone = "cd '#{parent_dir}'; git clone --mirror '#{git_url}'; cd -"
@@ -86,7 +86,7 @@ module GitHuBackUp
 					return "mkdir -p '#{parent_dir}'; #{cd_and_clone}"
 				end
 			end
-			raise CopyError, "Repository #{full_name} can not be pulled or cloned to #{dst_dir}"
+			raise CopyError, "Repository #{full_name} can not be fetched or cloned to #{dst_dir}"
 		end
 	end
 
