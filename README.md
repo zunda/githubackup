@@ -22,6 +22,12 @@ githubackup -h
 ```
 を参照してください。
 
+いまのところ、プログラムをインストールする方法が準備されていませんので、
+```
+ruby bin/githubackup
+```
+とファイルを指定して実行してください。
+
 ライセンス
 ----------
 A program to periodically back up one's repositories hosted on GitHub
