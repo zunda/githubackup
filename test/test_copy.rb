@@ -91,7 +91,7 @@ class TestCopy < Test::Unit::TestCase
 		class << repo
 			def can_fetch?; true; end
 		end
-		assert_equal("cd '/dstdir/user/repo.git'; git fetch; cd -", repo.update_cmd)
+		assert_equal("cd '/dstdir/user/repo.git'; git fetch -v; cd -", repo.update_cmd)
 	end
 
 	def test_update_with_git_clone_without_mkdir

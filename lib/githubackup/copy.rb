@@ -77,7 +77,7 @@ module GitHuBackUp
 
 		def update_cmd
 			if can_fetch?
-				return "cd '#{dst_dir}'; git fetch; cd -"
+				return "cd '#{dst_dir}'; git fetch -v; cd -"
 			elsif can_clone?
 				cd_and_clone = "cd '#{parent_dir}'; git clone --mirror '#{git_url}'; cd -"
 				if File.exists?(parent_dir)
