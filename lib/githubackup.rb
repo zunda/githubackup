@@ -15,7 +15,8 @@ require 'githubackup/endpoints'
 
 module GitHuBackUp
 	VERSION = '0.0.1'
-	
+	AGENT = "zunda@gmail.com - GitHuBackup - #{VERSION}"
+
 	def GitHuBackUp.execute(*args)
 		repos = Array.new
 		dstdir = nil
@@ -32,7 +33,7 @@ module GitHuBackUp
 
 			opts.on('-u', '--user USER', 'repositories for GitHub user') do |user|
 				puts "Fetching list of repositories for #{user}" if verbosity > 0
-				r = Repos.parse_json(open(GitHubApi.user_repos(user)).read)
+				r = Repos.parse_json(GitHuBackUp.read_json(GitHubApi.user_repos(user)))
 				repos += r
 				if verbosity > 1
 					r.each do |repo|
@@ -42,7 +43,7 @@ module GitHuBackUp
 			end
 			opts.on('-o', '--org ORGANIZATION', 'repositories for GitHub organization') do |org|
 				puts "Fetching list of repositories for #{org}" if verbosity > 0
-				r = Repos.parse_json(open(GitHubApi.org_repos(org)).read)
+				r = Repos.parse_json(GitHuBackUp.read_json(GitHubApi.org_repos(org)))
 				repos += r
 				if verbosity > 1
 					r.each do |repo|
@@ -52,7 +53,7 @@ module GitHuBackUp
 			end
 			opts.on('-r', '--repository FULL_NAME', 'full name of GitHub repository') do |name|
 				puts "Fetching information for repository #{name}" if verbosity > 0
-				r = GitHub::Repo.parse_json(open(GitHubApi.full_name_repo(name)).read)
+				r = GitHub::Repo.parse_json(GitHuBackUp.read_json(GitHubApi.full_name_repo(name)))
 				repos += [r]
 				if verbosity > 1
 					puts "Added repository #{r.full_name}"
@@ -116,5 +117,9 @@ module GitHuBackUp
 		end
 
 		exit errors ? 1 : 0
+	end
+
+	def GitHuBackUp.read_json(uri)
+		open(uri, 'User-Agent' => AGENT).read
 	end
 end
