@@ -27,4 +27,19 @@ class TestEndPoints < Test::Unit::TestCase
 		assert_equal('https://api.github.com/repos/zunda/githubackup',
 			GitHuBackUp::GitHubApi.full_name_repo('zunda/githubackup'))
 	end
+	
+	def test_strange_user_name
+		assert_equal('https://api.github.com/users/.%2F%20zunda/repos',
+			GitHuBackUp::GitHubApi.user_repos('./ zunda'))
+	end
+	
+	def test_strange_org_name
+		assert_equal('https://api.github.com/orgs/.%2F%20zunda/repos',
+			GitHuBackUp::GitHubApi.org_repos('./ zunda'))
+	end
+	
+	def test_strange_full_name
+		assert_equal('https://api.github.com/repos/x.%20/%20zunda%2Fan',
+			GitHuBackUp::GitHubApi.full_name_repo('x. / zunda/an'))
+	end
 end
