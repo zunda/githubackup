@@ -35,7 +35,7 @@ module GitHuBackUp
 				puts "Fetching list of repositories for #{user}" if verbosity > 0
 				r = Repos.parse_json(GitHuBackUp.read_json(GitHubApi.user_repos(user)))
 				repos += r
-				if verbosity > 1
+				if verbosity > 2
 					r.each do |repo|
 						puts "Added repository #{repo.full_name}"
 					end
