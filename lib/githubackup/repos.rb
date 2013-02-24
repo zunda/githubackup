@@ -19,14 +19,17 @@ module GitHuBackUp
 		end
 
 		def Repo.parse_json(json)
-			parsed = JSON.parse(json)
+			parsed = JSON.parse(json, :create_additions => false)
+			# :create_additions for CVE-2013-0269 that affects
+			# Ruby 1.9 < 1.9.3p392 and Ruby 2.0 < 2.0.0p0
+			# http://www.ruby-lang.org/en/news/2013/02/22/json-dos-cve-2013-0269/
 			return Repo.new(parsed['full_name'], parsed['git_url'])
 		end
 	end
 
 	class Repos
 		def Repos.parse_json(json)
-			JSON.parse(json).map{|entry|
+			JSON.parse(json, :create_additions => false).map{|entry|
 				Repo.new(entry['full_name'], entry['git_url'])
 			}
 		end
