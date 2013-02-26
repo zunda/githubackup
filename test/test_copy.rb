@@ -91,21 +91,21 @@ class TestCopy < Test::Unit::TestCase
 		class << repo
 			def can_fetch?; true; end
 		end
-		assert_equal("cd '/dstdir/user/repo.git'; git fetch -v; cd -", repo.update_cmd)
+		assert_equal("cd /dstdir/user/repo.git; git fetch -v; cd -", repo.update_cmd)
 	end
 
 	def test_update_with_git_clone_without_mkdir
 		Dir.mktmpdir do |dir|
 			repo = GitHuBackUp::Copy.new('user/repo', 'git:/user/repo.git', dir)
 			Dir.mkdir(File.join(dir, 'user'))
-			assert_equal("cd '#{dir}/user'; git clone --mirror 'git:/user/repo.git'; cd -", repo.update_cmd)
+			assert_equal("cd #{dir}/user; git clone --mirror git:/user/repo.git; cd -", repo.update_cmd)
 		end
 	end
 
 	def test_update_with_git_clone_with_mkdir
 		Dir.mktmpdir do |dir|
 			repo = GitHuBackUp::Copy.new('full_name', 'git:/user/repo.git', dir)
-			assert_equal("mkdir -p '#{dir}/user'; cd '#{dir}/user'; git clone --mirror 'git:/user/repo.git'; cd -", repo.update_cmd)
+			assert_equal("mkdir -p #{dir}/user; cd #{dir}/user; git clone --mirror git:/user/repo.git; cd -", repo.update_cmd)
 		end
 	end
 
@@ -131,6 +131,19 @@ class TestCopy < Test::Unit::TestCase
 		end
 		assert_raise GitHuBackUp::ValidationError do
 			GitHuBackUp::Copy.new('full_name', 'git:', '/dstdir')
+		end
+	end
+
+	def test_shellescape
+		Dir.mktmpdir do |dir|
+			repo = GitHuBackUp::Copy.new('user/repo', "git:/zunda's/repo.git", dir)
+			Dir.mkdir(File.join(dir, "zunda's"))
+			assert_equal("cd #{dir}/zunda\\'s; git clone --mirror git:/zunda\\'s/repo.git; cd -", repo.update_cmd)
+		end
+		Dir.mktmpdir do |dir|
+			repo = GitHuBackUp::Copy.new('user/repo', "git:/zunda-no/repo.git", dir)
+			Dir.mkdir(File.join(dir, "zunda-no"))
+			assert_equal("cd #{dir}/zunda-no; git clone --mirror git:/zunda-no/repo.git; cd -", repo.update_cmd)
 		end
 	end
 end

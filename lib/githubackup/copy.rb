@@ -7,6 +7,7 @@
 # the License, or (at your option) any later version.
 #
 require 'uri'
+require 'shellwords'
 
 module GitHuBackUp
 	class Copy
@@ -77,13 +78,13 @@ module GitHuBackUp
 
 		def update_cmd
 			if can_fetch?
-				return "cd '#{dst_dir}'; git fetch -v; cd -"
+				return "cd #{Shellwords.shellescape(dst_dir)}; git fetch -v; cd -"
 			elsif can_clone?
-				cd_and_clone = "cd '#{parent_dir}'; git clone --mirror '#{git_url}'; cd -"
+				cd_and_clone = "cd #{Shellwords.shellescape(parent_dir)}; git clone --mirror #{Shellwords.shellescape(git_url)}; cd -"
 				if File.exists?(parent_dir)
 					return cd_and_clone
 				else
-					return "mkdir -p '#{parent_dir}'; #{cd_and_clone}"
+					return "mkdir -p #{Shellwords.shellescape(parent_dir)}; #{cd_and_clone}"
 				end
 			end
 			raise CopyError, "Repository #{full_name} can not be fetched or cloned to #{dst_dir}"
