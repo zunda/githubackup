@@ -127,7 +127,7 @@ module GitHuBackUp
 		open(uri, 'User-Agent' => AGENT).read
 	end
 
-	def GitHuBackup.run_cmd(cmd, really_execute, verbosity)
+	def GitHuBackUp.run_cmd(cmd, really_execute, verbosity)
 		if really_execute
 			if verbosity < 2
 				# hide output from commands
