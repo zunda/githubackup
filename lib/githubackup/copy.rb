@@ -11,10 +11,6 @@ require 'shellwords'
 
 module GitHuBackUp
 	class Copy
-		def Copy.update_cmd(full_name, git_url, root_dst_dir)
-			Copy.new(full_name, git_url, root_dst_dir).update_cmd
-		end
-
 		attr_reader :git_url
 		attr_reader :full_name
 		attr_reader :dst_dir

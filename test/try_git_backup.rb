@@ -21,7 +21,11 @@ FileUtils.mkdir_p(root_dir)
 api_url = 'https://api.github.com/users/zunda/repos'
 repos = GitHuBackUp::Repos.parse_json(open(api_url).read)
 repos.entries[0..2].each do |repo|
-	cmd = GitHuBackUp::Copy.update_cmd(repo.full_name, repo.git_url, root_dir)
+	copy = GitHuBackUp::Copy.new(repo.full_name, repo.git_url, root_dir)
+	cmd = copy.update_cmd
+	puts cmd
+	system(cmd)
+	cmd = copy.fsck_cmd
 	puts cmd
 	system(cmd)
 end

@@ -14,7 +14,7 @@ require 'githubackup/copy'
 require 'githubackup/endpoints'
 
 module GitHuBackUp
-	VERSION = '0.0.1'
+	VERSION = '0.0.2'
 	AGENT = "zunda@gmail.com - GitHuBackup - #{VERSION}"
 
 	def GitHuBackUp.execute(*args)
@@ -22,6 +22,7 @@ module GitHuBackUp
 		dstdir = nil
 		verbosity = 0
 		really_execute = true
+		do_fsck = false
 
 		op = OptionParser.new do |opts|
 			opts.banner = "usaage: #{File.basename($0, '.rb')} [options] - backs up GitHub repositories"
@@ -64,6 +65,10 @@ module GitHuBackUp
 				really_execute = false
 			end
 
+			opts.on('-c', '--fsck', 'git fsck after fetch') do
+				do_fsck = true
+			end
+
 			opts.on('-v', '--verbose', 'increase verbosity') do
 				verbosity += 1
 			end
@@ -102,13 +107,12 @@ module GitHuBackUp
 				end
 			end
 			begin
-				cmd = Copy.update_cmd(repo.full_name, repo.git_url, dstdir)
-				if really_execute
-					if verbosity < 2
-						# hide output from commands
-						cmd = "{ #{cmd}; } > /dev/null 2>&1"
-					end
-					system(cmd)
+				copy = Copy.new(repo.full_name, repo.git_url, dstdir)
+				cmd = copy.update_cmd
+				GitHuBackup.run_cmd(cmd, really_execute, verbosity)
+				if do_fsck
+					cmd = copy.fsck_cmd
+					GitHuBackup.run_cmd(cmd, really_execute, verbosity)
 				end
 			rescue CopyError => e
 				$stderr.puts e
@@ -121,5 +125,15 @@ module GitHuBackUp
 
 	def GitHuBackUp.read_json(uri)
 		open(uri, 'User-Agent' => AGENT).read
+	end
+
+	def GitHuBackup.run_cmd(cmd, really_execute, verbosity)
+		if really_execute
+			if verbosity < 2
+				# hide output from commands
+				cmd = "{ #{cmd}; } > /dev/null 2>&1"
+			end
+			system(cmd)
+		end
 	end
 end
