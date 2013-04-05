@@ -119,6 +119,11 @@ class TestCopy < Test::Unit::TestCase
 			repo.update_cmd
 		end
 	end
+	
+	def test_fsck
+		repo = GitHuBackUp::Copy.new('user/repo', 'git:/user/repo.git', '/dstdir')
+		assert_equal("cd /dstdir/user/repo.git; git fsck; cd -", repo.fsck_cmd)
+	end
 
 	def test_vaildate_uri
 		['git:/.', 'git:/..', 'git:/./a', 'git:/../a', 'git://host'].each do |uri|

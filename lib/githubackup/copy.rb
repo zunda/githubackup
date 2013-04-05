@@ -89,6 +89,10 @@ module GitHuBackUp
 			end
 			raise CopyError, "Repository #{full_name} can not be fetched or cloned to #{dst_dir}"
 		end
+
+		def fsck_cmd
+			return "cd #{Shellwords.shellescape(dst_dir)}; git fsck; cd -"
+		end
 	end
 
 	class CopyError < StandardError; end
