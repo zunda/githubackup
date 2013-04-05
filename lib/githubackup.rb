@@ -109,10 +109,10 @@ module GitHuBackUp
 			begin
 				copy = Copy.new(repo.full_name, repo.git_url, dstdir)
 				cmd = copy.update_cmd
-				GitHuBackup.run_cmd(cmd, really_execute, verbosity)
+				GitHuBackUp.run_cmd(cmd, really_execute, verbosity)
 				if do_fsck
 					cmd = copy.fsck_cmd
-					GitHuBackup.run_cmd(cmd, really_execute, verbosity)
+					GitHuBackUp.run_cmd(cmd, really_execute, verbosity)
 				end
 			rescue CopyError => e
 				$stderr.puts e
