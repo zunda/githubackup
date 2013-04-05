@@ -74,9 +74,9 @@ module GitHuBackUp
 
 		def update_cmd
 			if can_fetch?
-				return "cd #{Shellwords.shellescape(dst_dir)}; git fetch -v; cd -"
+				return "cd #{Shellwords.shellescape(dst_dir)}; git fetch -v; cd - > /dev/null"
 			elsif can_clone?
-				cd_and_clone = "cd #{Shellwords.shellescape(parent_dir)}; git clone --mirror #{Shellwords.shellescape(git_url)}; cd -"
+				cd_and_clone = "cd #{Shellwords.shellescape(parent_dir)}; git clone --mirror #{Shellwords.shellescape(git_url)}; cd - > /dev/null"
 				if File.exists?(parent_dir)
 					return cd_and_clone
 				else
@@ -87,7 +87,7 @@ module GitHuBackUp
 		end
 
 		def fsck_cmd
-			return "cd #{Shellwords.shellescape(dst_dir)}; git fsck; cd -"
+			return "cd #{Shellwords.shellescape(dst_dir)}; git fsck; cd - > /dev/null"
 		end
 	end
 
