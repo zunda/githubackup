@@ -3,6 +3,11 @@ githubackup
 
 A program to periodically back up one's repositories hosted on GitHub
 
+The unauthenticated git protocol on port 9418 is no longer supported.
+---------------------------------------------------------------------
+
+2022-03-27 [GitHubによるセキュリティ強化](https://github.blog/2021-09-01-improving-git-protocol-security-github/)の一環として、このプログラムで利用している`git`プロトコルによる非認証アクセスが不許可になりました。改良の時間ができるまでこのレポジトリはアーカイブします。
+
 このプログラムの使い方
 ----------------------
 このプログラムは、あるGitHubのユーザーがGitHubにホストしてもらっている
